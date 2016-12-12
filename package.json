@@ -1,0 +1,26 @@
+{
+  "name": "node-ts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "gulp",
+    "build:live": "nodemon --ext ts,js --ignore 'dist/*.*' --exec gulp",
+    "package": "zip -jr chrome.zip dist/chrome/"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "0.0.2",
+    "browserify": "^13.1.1",
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-uglify": "^2.0.0",
+    "nodemon": "^1.11.0",
+    "tsify": "^2.0.3",
+    "typescript": "^2.1.4",
+    "vinyl-source-stream": "^1.1.0"
+  },
+  "dependencies": {}
+}

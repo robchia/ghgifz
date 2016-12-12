@@ -1,0 +1,42 @@
+
+#ghgifz-button {
+  float: left;
+}
+
+#ghgifz-panel {
+  display: none;
+  position: relative;
+  max-height: 250px;
+  max-width: 400px;
+  overflow: scroll;
+}
+
+#ghgifz-panel-container {
+  display: table;
+  padding: 8px;
+}
+
+.ghgifz-gif-row {
+  display: table-row;
+  height: 100px;
+}
+
+.ghgifz-gif-cell {
+  width: 100px;
+  display: table-cell;
+  cursor: pointer;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.ghgifz-gif-cell img {
+  max-width: 90px;
+}
+
+#ghgifz-topbar {
+  width: 100%;
+  padding: 5px;
+  position: absolute;
+  top: 0;
+  background-color: rgba(255, 255, 255, 0.5);
+}
