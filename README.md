@@ -1,5 +1,7 @@
 # ghgifz
 
+![screenshot](https://github.com/robchia/ghgifz/blob/master/screenshot.gif)
+
 ## Setup
 
 ```bash
