@@ -13,6 +13,10 @@ function el(id: string): Element {
 }
 
 function elNode(node: Element, className: string): Element {
+  if (!node) {
+    return;
+  }
+
   const el = node.getElementsByClassName(className);
   if (!el) {
     return null;
