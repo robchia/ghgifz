@@ -1,10 +1,12 @@
-import { Button } from './Button';
-import { Popup } from './Popup';
-import { gifs } from './gifs';
+import { Button } from './components/button';
+import { Popup } from './components/popup';
+import { gifs } from './data/gifs';
 
 const GHGIFZ = 'ghgifz';
 const YAS = 'yas';
 const APPEND_IDS = ['new_inline_comment_diff_diff', 'pull_request_review_body', 'new_comment_field'];
+const GIPHY_API_KEY = 'dc6zaTOxFJmzC'
+const TAG_LINE = 'SHHHHIP IT!';
 
 function shouldAppendButtonToId(id: string) {
   return APPEND_IDS.filter((prefix) => { return id.match('^' + prefix) }).length;
@@ -29,7 +31,7 @@ function attachGifButtonz() {
         textarea.focus();
       };
       popup.handler = (gif) => {
-        insertText(textarea, '![SHHHHIP IT!](' + gif.large + ')\n');
+        insertText(textarea, '![' + TAG_LINE + '](' + gif.large + ')\n');
         popup.remove();
       };
       popup.appendTo(document.body);

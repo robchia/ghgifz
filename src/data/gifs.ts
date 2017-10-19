@@ -1,4 +1,4 @@
-import { Gif } from './Gif';
+import { Gif } from './../components/gif';
 
 export const gifs: Array<Gif> = [
   {
@@ -204,5 +204,9 @@ export const gifs: Array<Gif> = [
   {
     "thumb": "https://camo.githubusercontent.com/ab11c5ca3c10ca40737f631d52b08da319d38c8c/68747470733a2f2f6d65646961312e67697068792e636f6d2f6d656469612f6c304b34344856467a56446d39324469382f3130302e676966",
     "large": "https://media1.giphy.com/media/l0K44HVFzVDm92Di8/giphy.gif"
-  }
+  },
+  {
+    "thumb": "https://camo.githubusercontent.com/1dd4e63a21761edc58f170a0b1a57c1b6fd3ee08/68747470733a2f2f6d65646961312e67697068792e636f6d2f6d656469612f78543949677065726e484c503565574f59302f3130302e676966",
+    "large": "https://media1.giphy.com/media/xT9IgpernHLP5eWOY0/giphy.gif"
+  },
 ];

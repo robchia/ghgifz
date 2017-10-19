@@ -1,4 +1,4 @@
-import { El } from './El';
+import { El } from './element';
 
 export class Button extends El {
   constructor() {

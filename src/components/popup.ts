@@ -1,5 +1,5 @@
-import { El } from './El';
-import { Gif } from './Gif';
+import { El } from './element';
+import { Gif } from './gif';
 
 const COLUMNS = 4;
 
