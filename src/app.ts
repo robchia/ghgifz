@@ -1,102 +1,74 @@
 import { Button } from './Button';
-import { Panel } from './Panel';
+import { Popup } from './Popup';
 import { gifs } from './gifs';
 
-const PANEL_ID = 'ghgifz-panel';
+const GHGIFZ = 'ghgifz';
+const YAS = 'yas';
+const APPEND_IDS = ['new_inline_comment_diff_diff', 'pull_request_review_body', 'new_comment_field'];
 
-function isPRFiles() {
-  return window.location.href.match(/https?:\/\/github\.com\/.*\/pull\/.*?\/files/);
+function shouldAppendButtonToId(id: string) {
+  return APPEND_IDS.filter((prefix) => { return id.match('^' + prefix) }).length;
 }
 
-function el(id: string): Element {
-  return document.getElementById(id);
-}
+function attachGifButtonz() {
+  const textareas = document.getElementsByTagName('textarea');
+  for (let i=0; i<textareas.length; i++) {
+    const textarea = textareas[i];
+    if (!shouldAppendButtonToId(textarea.id)) {
+      continue;
+    }
+    const id = GHGIFZ + '-' + textarea.id;
+    if (document.getElementById(id)) {
+      continue;
+    }
+    const button = new Button();
+    button.id = id;
+    button.onclick = () => {
+      const popup = new Popup();
+      popup.onremove = () => {
+        textarea.focus();
+      };
+      popup.handler = (gif) => {
+        insertText(textarea, '![SHHHHIP IT!](' + gif.large + ')\n');
+        popup.remove();
+      };
+      popup.appendTo(document.body);
+      popup.alignTo(button.element);
+      popup.loadGifs(gifs);
+    };
 
-function elNode(node: Element, className: string): Element {
-  if (!node) {
-    return;
+    textarea.parentElement.appendChild(button.element);
+    textarea.dataset[GHGIFZ] = YAS;
   }
-
-  const el = node.getElementsByClassName(className);
-  if (!el) {
-    return null;
-  }
-
-  return el[0];
 }
 
-function attachButton(button: Button) {
-  const container = elNode(el('submit-review'), 'form-actions');
-  if (!container) {
-    return;
-  }
-
-  button.appendTo(container);
-}
-
-function attachPanel(panel: Panel) {
-  const container = elNode(el('submit-review'), 'form-actions');
-  if (!container) {
-    return;
-  }
-
-  panel.appendTo(container.parentElement);
-}
-
-function insertText(el, text) {
-  if (el.selectionStart || el.selectionStart === 0) {
-    let startPos = el.selectionStart;
-    let endPos = el.selectionEnd;
-    let scrollTop = el.scrollTop;
+function insertText(textarea: HTMLTextAreaElement, text: string) {
+  if (textarea.selectionStart || textarea.selectionStart === 0) {
+    let startPos = textarea.selectionStart;
+    let endPos = textarea.selectionEnd;
+    let scrollTop = textarea.scrollTop;
 
     if (startPos > 0) {
       text = '\n' + text;
     }
 
-    el.value = el.value.substring(0, startPos) + text + el.value.substring(endPos, el.value.length);
-    el.focus();
-    el.selectionStart = startPos + text.length;
-    el.selectionEnd = startPos + text.length;
-    el.scrollTop = scrollTop;
+    textarea.value = textarea.value.substring(0, startPos) + text + textarea.value.substring(endPos, textarea.value.length);
+    textarea.focus();
+    textarea.selectionStart = startPos + text.length;
+    textarea.selectionEnd = startPos + text.length;
+    textarea.scrollTop = scrollTop;
   } else {
-    el.value += text;
-    el.focus();
+    textarea.value += text;
+    textarea.focus();
   }
-}
-
-const panel = new Panel(gifs);
-panel.handler = (gif) => {
-  let textarea = document.getElementById('pull_request_review_body');
-  if (!textarea) {
-    return;
-  }
-
-  insertText(textarea, '![SHHHHIP IT!](' + gif.large + ')\n');
-
-  panel.hide();
-};
-
-const button = new Button();
-button.el.onclick = () => {
-  if (panel.isHidden()) {
-    panel.show();
-  } else {
-    panel.hide();
-  }
-};
-
-if (isPRFiles()) {
-  attachButton(button);
-  attachPanel(panel);
 }
 
 document.addEventListener('DOMNodeInserted', (e) => {
-  if (isPRFiles()) {
-    if (el(PANEL_ID) || !(e.target instanceof Element)) {
-      return;
-    }
-
-    attachButton(button);
-    attachPanel(panel);
+  if (/*$(PANEL_ID) || */!(e.target instanceof Element)) {
+    return;
   }
+
+  attachGifButtonz();
 }, false);
+
+attachGifButtonz();

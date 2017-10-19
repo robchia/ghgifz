@@ -5,11 +5,10 @@ export class Button extends El {
     super();
 
     let button = document.createElement('button');
-    button.id = 'ghgifz-button';
     button.type = 'button';
-    button.className = 'btn btn-sm btn-plain';
+    button.className = 'ghgifz-btn';
     button.innerHTML = '🚀';
 
-    this.el = button;
+    this.element = button;
   }
 };
