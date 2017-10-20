@@ -20,8 +20,12 @@ function attachGifButtonz() {
       continue;
     }
     const id = GHGIFZ + '-' + textarea.id;
-    if (document.getElementById(id)) {
-      continue;
+    const existingButton = document.getElementById(id);
+    if (existingButton) {
+      if (existingButton.onclick) {
+        continue;
+      }
+      existingButton.remove();
     }
     const button = new Button();
     button.id = id;
