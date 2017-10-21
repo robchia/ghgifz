@@ -9,7 +9,7 @@
 }
 
 #ghgifz-popup {
-  background: linear-gradient(45deg, #0cffc1, #f8f024, #f85124, #5d24f8);
+  background: linear-gradient(45deg, #03FF8E, #00C5FF, #8E2EFF, #FF5B5B, #FFF152);
   background-size: 800% 800%;
   -webkit-animation: AnimationName 10s ease infinite;
   animation: AnimationName 10s ease infinite;
@@ -39,11 +39,12 @@
 }
 
 .ghgifz-popup-header-title {
-  color: #fff;
+  color: #0a0a0a;
+  font-weight: 600;
 }
 
 .ghgifz-popup-header-close {
-  color: #fff;
+  color: #0a0a0a;
   cursor: pointer;
   fill: currentColor;
   opacity: 0.4;
