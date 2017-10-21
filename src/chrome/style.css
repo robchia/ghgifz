@@ -9,8 +9,10 @@
 }
 
 #ghgifz-popup {
-  background-color: #fff;
-  border: 1px solid #ccc;
+  background: linear-gradient(45deg, #0cffc1, #f8f024, #f85124, #5d24f8);
+  background-size: 800% 800%;
+  -webkit-animation: AnimationName 10s ease infinite;
+  animation: AnimationName 10s ease infinite;
   border-radius: 3px;
   box-shadow: 0 3px 12px rgba(0,0,0,0.15);
   width: 300px;
@@ -20,9 +22,41 @@
   z-index: 9999;
 }
 
+@-webkit-keyframes AnimationName {
+  0%{background-position:90% 0%}
+  50%{background-position:11% 100%}
+  100%{background-position:90% 0%}
+}
+@keyframes AnimationName {
+  0%{background-position:90% 0%}
+  50%{background-position:11% 100%}
+  100%{background-position:90% 0%}
+}
+
+.ghgifz-popup-header {
+  padding: 8px 10px;
+  line-height: 16px;
+}
+
+.ghgifz-popup-header-title {
+  color: #fff;
+}
+
+.ghgifz-popup-header-close {
+  color: #fff;
+  cursor: pointer;
+  fill: currentColor;
+  opacity: 0.4;
+  transition: opacity .15s;
+}
+
+.ghgifz-popup-header-close:hover {
+  opacity: 1;
+}
+
 #ghgifz-popup-grid-container {
   width: 100%;
-  height: 420px;
+  height: 410px;
   padding: 10px;
 }
 
@@ -32,13 +66,14 @@
   grid-gap: 10px;
   overflow: scroll;
   width: 100%;
-  height: 100%;
+  height: 390px;
 }
 
 #ghgifz-popup-grid img {
   display: inline-block;
   width: 100%;
   margin-bottom: 0;
+  cursor: pointer;
 }
 
 .ghgifz-btn {
@@ -53,5 +88,5 @@
 }
 
 .ghgifz-btn:hover {
-  opacity: 1.0;
+  opacity: 1;
 }

@@ -1,15 +1,22 @@
+import { Config } from './config/config';
 import { Button } from './components/button';
 import { Popup } from './components/popup';
-import { gifs } from './data/gifs';
+import { Gifs } from './lib/gifs';
 
-const GHGIFZ = 'ghgifz';
-const YAS = 'yas';
-const APPEND_IDS = ['new_inline_comment_diff_diff', 'pull_request_review_body', 'new_comment_field'];
-const GIPHY_API_KEY = 'dc6zaTOxFJmzC'
-const TAG_LINE = 'SHHHHIP IT!';
+function init() {
+  document.addEventListener('DOMNodeInserted', (e) => {
+    if (!(e.target instanceof Element)) {
+      return;
+    }
+
+    attachGifButtonz();
+  }, false);
+
+  attachGifButtonz();
+}
 
 function shouldAppendButtonToId(id: string) {
-  return APPEND_IDS.filter((prefix) => { return id.match('^' + prefix) }).length;
+  return Config.appendIDs.filter((prefix) => { return id.match('^' + prefix) }).length;
 }
 
 function attachGifButtonz() {
@@ -19,7 +26,7 @@ function attachGifButtonz() {
     if (!shouldAppendButtonToId(textarea.id)) {
       continue;
     }
-    const id = GHGIFZ + '-' + textarea.id;
+    const id = Config.ghgifz + '-' + textarea.id;
     const existingButton = document.getElementById(id);
     if (existingButton) {
       if (existingButton.onclick) {
@@ -34,17 +41,31 @@ function attachGifButtonz() {
       popup.onremove = () => {
         textarea.focus();
       };
-      popup.handler = (gif) => {
-        insertText(textarea, '![' + TAG_LINE + '](' + gif.large + ')\n');
+      popup.onselect = (gif) => {
+        insertText(textarea, '![' + Config.tagLine + '](' + gif.large + ')\n');
         popup.remove();
       };
       popup.appendTo(document.body);
       popup.alignTo(button.element);
-      popup.loadGifs(gifs);
+
+      const onload = () => {
+        Gifs.gifs((gifs) => {
+          popup.loadGifs(gifs);
+        });
+      };
+
+      if (!Gifs.lastUpdated()) {
+        Gifs.update(() => {
+          onload();
+        });
+        return;
+      }
+
+      onload();
     };
 
     textarea.parentElement.appendChild(button.element);
-    textarea.dataset[GHGIFZ] = YAS;
+    textarea.dataset[Config.ghgifz] = Config.yas;
   }
 }
 
@@ -69,12 +90,4 @@ function insertText(textarea: HTMLTextAreaElement, text: string) {
   }
 }
 
-document.addEventListener('DOMNodeInserted', (e) => {
-  if (/*$(PANEL_ID) || */!(e.target instanceof Element)) {
-    return;
-  }
-
-  attachGifButtonz();
-}, false);
-
-attachGifButtonz();
+init();

@@ -1,5 +1,4 @@
 import { El } from './element';
-import { Gif } from './gif';
 
 const COLUMNS = 4;
 
@@ -8,9 +7,10 @@ export class Popup extends El {
   private grid: HTMLDivElement;
   private gridContainer: HTMLDivElement;
   private modal: HTMLDivElement;
-  private gifs: Array<Gif> = [];
+  private gifs: any = [];
 
-  handler: (gif: Gif) => void;
+  onselect: (gif: any) => void;
+  onload: () => void;
 
   constructor() {
     super();
@@ -19,8 +19,6 @@ export class Popup extends El {
 
     this.initModal();
     this.initPopup();
-    this.initGridContainer();
-    this.initGrid();
   }
 
   initModal() {
@@ -41,6 +39,30 @@ export class Popup extends El {
       event.stopPropagation();
     };
     this.element.appendChild(this.popup);
+
+    this.initHeader();
+    this.initGridContainer();
+    this.initGrid();
+  }
+
+  initHeader() {
+    const headerDiv = document.createElement('div');
+    headerDiv.className = 'ghgifz-popup-header';
+
+    const closeButton = document.createElement('div');
+    closeButton.style.cssFloat = 'right';
+    closeButton.innerHTML = '<svg aria-label="Close" class="ghgifz-popup-header-close" height="16" role="img" version="1.1" viewBox="0 0 12 16" width="12"><path fill-rule="evenodd" d="M7.48 8l3.75 3.75-1.48 1.48L6 9.48l-3.75 3.75-1.48-1.48L4.52 8 .77 4.25l1.48-1.48L6 6.52l3.75-3.75 1.48 1.48z"></path></svg>'
+    closeButton.onclick = () => {
+      this.remove();
+    };
+    headerDiv.appendChild(closeButton);
+
+    const searchDiv = document.createElement('div');
+    searchDiv.className = 'ghgifz-popup-header-title';
+    searchDiv.innerHTML = 'SHHHHIP IT!';
+    headerDiv.appendChild(searchDiv);
+
+    this.popup.appendChild(headerDiv);
   }
 
   initGridContainer() {
@@ -80,8 +102,6 @@ export class Popup extends El {
   }
 
   loadGifs(gifs) {
-    const self = this;
-
     let div = document.createElement('div');
 
     this.gifs = gifs;
@@ -91,12 +111,13 @@ export class Popup extends El {
     for (let i=0; i<randomizedGifs.length; i++) {
       let gif = randomizedGifs[i];
       let img = document.createElement('img');
-      img.onclick = function() {
-        if (self.handler) {
-          self.handler(gif);
+      img.onclick = () => {
+        if (this.onselect) {
+          this.onselect(gif);
         }
       };
       img.src = gif.thumb;
+      img.title = gif.title;
 
       this.grid.appendChild(img);
     }

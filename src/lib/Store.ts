@@ -1,5 +1,5 @@
 
-class Store {
+export class Store {
   set(key: string, value: any) {
     localStorage.setItem(key, JSON.stringify(value));
   }
