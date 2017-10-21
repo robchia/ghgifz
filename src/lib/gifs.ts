@@ -48,19 +48,11 @@ export class Gifs {
       try {
         const gistJSON = JSON.parse(response);
         const content = gistJSON.files['gifz.json'].content;
-        const ids = JSON.parse(content).ids;
-        if (!ids.length) {
-          return;
-        }
+        const gifs = JSON.parse(content).gifs;
 
-        Giphy.gifs(ids, (json: any) => {
-          if (!json) {
-            return;
-          }
-          this.store.set(GIFS_KEY, json.data);
-          this.store.set(LAST_UPDATED_KEY, new Date());
-          cb();
-        });
+        this.store.set(GIFS_KEY, gifs);
+        this.store.set(LAST_UPDATED_KEY, new Date());
+        cb();
       } catch (e) {
         console.log('<Gifs>', e);
       }
