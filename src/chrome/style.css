@@ -77,6 +77,10 @@
   cursor: pointer;
 }
 
+#ghgifz-popup-grid::-webkit-scrollbar {
+	display: none
+}
+
 .ghgifz-btn {
   background-color: transparent;
   border: none;
