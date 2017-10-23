@@ -47,7 +47,7 @@ export class Gifs {
 
       try {
         const gistJSON = JSON.parse(response);
-        const content = gistJSON.files['gifz.json'].content;
+        const content = gistJSON.files['gifs.json'].content;
         const gifs = JSON.parse(content).gifs;
 
         this.store.set(GIFS_KEY, gifs);
