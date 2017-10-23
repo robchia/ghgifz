@@ -23,5 +23,7 @@
     "typescript": "^2.1.4",
     "vinyl-source-stream": "^1.1.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "xmlhttprequest": "^1.8.0"
+  }
 }
