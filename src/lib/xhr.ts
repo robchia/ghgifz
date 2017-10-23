@@ -1,3 +1,5 @@
+import { XMLHttpRequest } from 'xmlhttprequest';
+
 export class XHR {
   get(url: string, cb: (status: number, response: string) => void) {
     const xhr = new XMLHttpRequest();

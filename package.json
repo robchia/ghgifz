@@ -6,7 +6,8 @@
   "scripts": {
     "build": "gulp",
     "build:live": "nodemon --ext ts,js --ignore 'dist/*.*' --exec gulp",
-    "package": "zip -jr chrome.zip dist/chrome/"
+    "package": "zip -jr chrome.zip dist/chrome/",
+    "giphy": "ts-node scripts/giphy-gifs-from-ids.ts"
   },
   "keywords": [],
   "author": "",
