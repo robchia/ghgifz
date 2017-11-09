@@ -15,6 +15,25 @@ function init() {
   attachGifButtonz();
 }
 
+function update(cb: () => void) {
+  const lastUpdated = Gifs.lastUpdated();
+  const diff = (new Date()).getTime() - lastUpdated.getTime();
+  const shouldUpdate = diff > (3600 * 10);
+  if (!lastUpdated || shouldUpdate) {
+    Gifs.currentVersion((version: string) => {
+      let localVersion = Gifs.localVersion();
+      let newerVersionAvailable: boolean = !localVersion || (localVersion != version);
+      if (newerVersionAvailable) {
+        Gifs.update(cb);
+      } else {
+        cb();
+      }
+    });
+  } else {
+    cb();
+  }
+}
+
 function shouldAppendButtonToId(id: string) {
   return Config.appendIDs.filter((prefix) => { return id.match('^' + prefix) }).length;
 }
@@ -54,14 +73,9 @@ function attachGifButtonz() {
         });
       };
 
-      if (!Gifs.lastUpdated()) {
-        Gifs.update(() => {
-          onload();
-        });
-        return;
-      }
-
-      onload();
+      update(() => {
+        onload();
+      });
     };
 
     textarea.parentElement.appendChild(button.element);

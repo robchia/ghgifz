@@ -3,8 +3,10 @@ import { Store } from './store';
 import { XHR } from './xhr';
 import { Giphy } from './giphy';
 
+const PREFIX = Config.appName + '_';
 const LAST_UPDATED_KEY = 'LastUpdated';
 const GIFS_KEY = 'Gifs';
+const VERSION = 'Version'
 
 export class Gif {
   id: string;
@@ -24,7 +26,19 @@ export class Gifs {
   static store: Store = new Store();
 
   static lastUpdated(): Date {
-    return this.store.get(LAST_UPDATED_KEY);
+    const dateString = this.store.get(LAST_UPDATED_KEY) || '1970-01-01T00:00:00.000Z';
+    return new Date(dateString);
+  }
+
+  static localVersion(): string {
+    return this.store.get(VERSION);
+  }
+
+  static currentVersion(cb: (version: string) => void) {
+    const xhr = new XHR();
+    xhr.get(Config.gifsVersionURL, (status: number, response: string) => {
+      cb(response);
+    });
   }
 
   static gifs(cb: (gifs: any) => void) {
@@ -39,7 +53,7 @@ export class Gifs {
 
   static update(cb: () => void) {
     const xhr = new XHR();
-    xhr.get(Config.gifsGistURL, (status: number, response: string) => {
+    xhr.get(Config.gifsJSONURL, (status: number, response: string) => {
       if (status != 200) {
         console.log('<Gifs>', status, response);
         return;
@@ -48,10 +62,11 @@ export class Gifs {
       try {
         const gistJSON = JSON.parse(response);
         const content = gistJSON.files['gifs.json'].content;
-        const gifs = JSON.parse(content).gifs;
+        const json = JSON.parse(content);
 
-        this.store.set(GIFS_KEY, gifs);
+        this.store.set(GIFS_KEY, json.gifs);
         this.store.set(LAST_UPDATED_KEY, new Date());
+        this.store.set(VERSION, json.version);
         cb();
       } catch (e) {
         console.log('<Gifs>', e);

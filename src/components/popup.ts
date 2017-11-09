@@ -1,6 +1,9 @@
 import { El } from './element';
 
 const COLUMNS = 4;
+const MODAL_ID = 'ghgifz-modal';
+const POPUP_ID = 'ghgifz-popup';
+const HEADER_ID = 'ghgifz-popup-header';
 
 export class Popup extends El {
   private popup: HTMLDivElement;
@@ -23,7 +26,7 @@ export class Popup extends El {
 
   initModal() {
     this.modal = document.createElement('div');
-    this.modal.id = 'ghgifz-modal';
+    this.modal.id = MODAL_ID;
     this.modal.onclick = () => {
       event.stopPropagation();
       this.remove();
@@ -34,7 +37,7 @@ export class Popup extends El {
 
   initPopup() {
     this.popup = document.createElement('div');
-    this.popup.id = 'ghgifz-popup';
+    this.popup.id = POPUP_ID;
     this.popup.onclick = () => {
       event.stopPropagation();
     };
@@ -47,7 +50,7 @@ export class Popup extends El {
 
   initHeader() {
     const headerDiv = document.createElement('div');
-    headerDiv.className = 'ghgifz-popup-header';
+    headerDiv.id = HEADER_ID;
 
     const closeButton = document.createElement('div');
     closeButton.style.cssFloat = 'right';
