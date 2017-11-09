@@ -4,9 +4,9 @@ import { XHR } from './xhr';
 import { Giphy } from './giphy';
 
 const PREFIX = Config.appName + '_';
-const LAST_UPDATED_KEY = 'LastUpdated';
-const GIFS_KEY = 'Gifs';
-const VERSION = 'Version'
+const LAST_UPDATED_KEY = PREFIX + 'LastUpdated';
+const GIFS_KEY = PREFIX + 'Gifs';
+const VERSION = PREFIX + 'Version';
 
 export class Gif {
   id: string;
@@ -60,9 +60,7 @@ export class Gifs {
       }
 
       try {
-        const gistJSON = JSON.parse(response);
-        const content = gistJSON.files['gifs.json'].content;
-        const json = JSON.parse(content);
+        const json = JSON.parse(response);
 
         this.store.set(GIFS_KEY, json.gifs);
         this.store.set(LAST_UPDATED_KEY, new Date());
