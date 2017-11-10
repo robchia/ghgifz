@@ -17,8 +17,8 @@ function init() {
 
 function update(cb: () => void) {
   const lastUpdated = Gifs.lastUpdated();
-  const diff = (new Date()).getTime() - lastUpdated.getTime();
-  const shouldUpdate = diff > (3600 * 10);
+  const hoursLastUpdatedAgo = ((new Date()).getTime() - lastUpdated.getTime()) / 1000 / 60 / 60;
+  const shouldUpdate = hoursLastUpdatedAgo >= 10;
   if (!lastUpdated || shouldUpdate) {
     Gifs.currentVersion((version: string) => {
       const localVersion = Gifs.localVersion();

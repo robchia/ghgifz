@@ -41,13 +41,12 @@ export class Gifs {
   public static update(cb: () => void) {
     const xhr = new XHR();
     xhr.get(Config.gifsJSONURL, (status: number, response: string) => {
-      if (status != 200) {
+      if (status !== 200) {
         throw new Error('<Gifs>' + status + response);
       }
 
       try {
         const json = JSON.parse(response);
-
         this.store.set(GIFS_KEY, json.gifs);
         this.store.set(LAST_UPDATED_KEY, new Date());
         this.store.set(VERSION, json.version);
