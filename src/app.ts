@@ -1,6 +1,6 @@
-import { Config } from './config/config';
 import { Button } from './components/button';
 import { Popup } from './components/popup';
+import { Config } from './config/config';
 import { Gifs } from './lib/gifs';
 
 function init() {
@@ -21,8 +21,8 @@ function update(cb: () => void) {
   const shouldUpdate = diff > (3600 * 10);
   if (!lastUpdated || shouldUpdate) {
     Gifs.currentVersion((version: string) => {
-      let localVersion = Gifs.localVersion();
-      let newerVersionAvailable: boolean = !localVersion || (localVersion != version);
+      const localVersion = Gifs.localVersion();
+      const newerVersionAvailable = !localVersion || (localVersion !== version);
       if (newerVersionAvailable) {
         Gifs.update(cb);
       } else {
@@ -35,13 +35,12 @@ function update(cb: () => void) {
 }
 
 function shouldAppendButtonToId(id: string) {
-  return Config.appendIDs.filter((prefix) => { return id.match('^' + prefix) }).length;
+  return Config.appendIDs.filter((prefix) => id.match('^' + prefix)).length;
 }
 
 function attachGifButtonz() {
   const textareas = document.getElementsByTagName('textarea');
-  for (let i=0; i<textareas.length; i++) {
-    const textarea = textareas[i];
+  for (const textarea of textareas as any) {
     if (!shouldAppendButtonToId(textarea.id)) {
       continue;
     }
@@ -85,15 +84,17 @@ function attachGifButtonz() {
 
 function insertText(textarea: HTMLTextAreaElement, text: string) {
   if (textarea.selectionStart || textarea.selectionStart === 0) {
-    let startPos = textarea.selectionStart;
-    let endPos = textarea.selectionEnd;
-    let scrollTop = textarea.scrollTop;
+    const startPos = textarea.selectionStart;
+    const endPos = textarea.selectionEnd;
+    const scrollTop = textarea.scrollTop;
 
     if (startPos > 0) {
       text = '\n' + text;
     }
 
-    textarea.value = textarea.value.substring(0, startPos) + text + textarea.value.substring(endPos, textarea.value.length);
+    const prefix = textarea.value.substring(0, startPos);
+    const suffix = textarea.value.substring(endPos, textarea.value.length);
+    textarea.value = prefix + text + suffix;
     textarea.focus();
     textarea.selectionStart = startPos + text.length;
     textarea.selectionEnd = startPos + text.length;

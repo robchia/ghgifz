@@ -1,7 +1,7 @@
 import { XMLHttpRequest } from 'xmlhttprequest';
 
 export class XHR {
-  get(url: string, cb: (status: number, response: string) => void) {
+  public get(url: string, cb: (status: number, response: string) => void) {
     const xhr = new XMLHttpRequest();
     xhr.open('GET', url);
     xhr.onload = () => {

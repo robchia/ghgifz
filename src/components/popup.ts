@@ -6,14 +6,14 @@ const POPUP_ID = 'ghgifz-popup';
 const HEADER_ID = 'ghgifz-popup-header';
 
 export class Popup extends El {
+  public onselect: (gif: any) => void;
+  public onload: () => void;
+
   private popup: HTMLDivElement;
   private grid: HTMLDivElement;
   private gridContainer: HTMLDivElement;
   private modal: HTMLDivElement;
   private gifs: any = [];
-
-  onselect: (gif: any) => void;
-  onload: () => void;
 
   constructor() {
     super();
@@ -24,7 +24,35 @@ export class Popup extends El {
     this.initPopup();
   }
 
-  initModal() {
+  public alignTo(el: HTMLElement) {
+    const rect = el.getBoundingClientRect();
+    const popupRect = this.popup.getBoundingClientRect();
+    this.popup.style.top = (window.pageYOffset + rect.top + rect.height) + 'px';
+    this.popup.style.left = (rect.left - popupRect.width) + rect.width + 'px';
+  }
+
+  public loadGifs(gifs) {
+    const div = document.createElement('div');
+
+    this.gifs = gifs;
+
+    const randomizedGifs = this.randomized(this.gifs);
+
+    for (const gif of randomizedGifs) {
+      const img = document.createElement('img');
+      img.onclick = () => {
+        if (this.onselect) {
+          this.onselect(gif);
+        }
+      };
+      img.src = gif.thumb;
+      img.title = gif.title;
+
+      this.grid.appendChild(img);
+    }
+  }
+
+  private initModal() {
     this.modal = document.createElement('div');
     this.modal.id = MODAL_ID;
     this.modal.onclick = () => {
@@ -35,7 +63,7 @@ export class Popup extends El {
     this.element.appendChild(this.modal);
   }
 
-  initPopup() {
+  private initPopup() {
     this.popup = document.createElement('div');
     this.popup.id = POPUP_ID;
     this.popup.onclick = () => {
@@ -48,7 +76,7 @@ export class Popup extends El {
     this.initGrid();
   }
 
-  initHeader() {
+  private initHeader() {
     const headerDiv = document.createElement('div');
     headerDiv.id = HEADER_ID;
 
@@ -68,30 +96,24 @@ export class Popup extends El {
     this.popup.appendChild(headerDiv);
   }
 
-  initGridContainer() {
+  private initGridContainer() {
     this.gridContainer = document.createElement('div');
     this.gridContainer.id = 'ghgifz-popup-grid-container';
     this.popup.appendChild(this.gridContainer);
   }
 
-  initGrid() {
+  private initGrid() {
     this.grid = document.createElement('div');
     this.grid.id = 'ghgifz-popup-grid';
     this.gridContainer.appendChild(this.grid);
   }
 
-  alignTo(el: HTMLElement) {
-    const rect = el.getBoundingClientRect();
-    const popupRect = this.popup.getBoundingClientRect();
-    this.popup.style.top = (window.pageYOffset + rect.top + rect.height) + 'px';
-    this.popup.style.left = (rect.left - popupRect.width) + rect.width + 'px';
-  }
-
-  randomized(gifs) {
-    let randomized = gifs;
+  private randomized(gifs) {
+    const randomized = gifs;
 
     let i = gifs.length;
-    let tmp, rand;
+    let tmp;
+    let rand;
 
     while (i !== 0) {
       rand = Math.floor(Math.random() * i);
@@ -102,27 +124,5 @@ export class Popup extends El {
     }
 
     return randomized;
-  }
-
-  loadGifs(gifs) {
-    let div = document.createElement('div');
-
-    this.gifs = gifs;
-
-    let randomizedGifs = this.randomized(this.gifs);
-
-    for (let i=0; i<randomizedGifs.length; i++) {
-      let gif = randomizedGifs[i];
-      let img = document.createElement('img');
-      img.onclick = () => {
-        if (this.onselect) {
-          this.onselect(gif);
-        }
-      };
-      img.src = gif.thumb;
-      img.title = gif.title;
-
-      this.grid.appendChild(img);
-    }
   }
 };

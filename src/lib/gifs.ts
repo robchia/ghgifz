@@ -1,47 +1,34 @@
 import { Config } from '../config/config';
+import { Gif } from '../models/gif';
+import { Giphy } from './giphy';
 import { Store } from './store';
 import { XHR } from './xhr';
-import { Giphy } from './giphy';
 
 const PREFIX = Config.appName + '_';
 const LAST_UPDATED_KEY = PREFIX + 'LastUpdated';
 const GIFS_KEY = PREFIX + 'Gifs';
 const VERSION = PREFIX + 'Version';
 
-export class Gif {
-  id: string;
-  title: string;
-  thumb: string;
-  large: string;
-
-  constructor(id: string, title: string, thumb: string, large: string) {
-    this.id = id;
-    this.title = title;
-    this.thumb = thumb;
-    this.large = large;
-  }
-}
-
 export class Gifs {
-  static store: Store = new Store();
+  public static readonly store: Store = new Store();
 
-  static lastUpdated(): Date {
+  public static lastUpdated(): Date {
     const dateString = this.store.get(LAST_UPDATED_KEY) || '1970-01-01T00:00:00.000Z';
     return new Date(dateString);
   }
 
-  static localVersion(): string {
+  public static localVersion(): string {
     return this.store.get(VERSION);
   }
 
-  static currentVersion(cb: (version: string) => void) {
+  public static currentVersion(cb: (version: string) => void) {
     const xhr = new XHR();
     xhr.get(Config.gifsVersionURL, (status: number, response: string) => {
       cb(response);
     });
   }
 
-  static gifs(cb: (gifs: any) => void) {
+  public static gifs(cb: (gifs: any) => void) {
     const gifs = this.store.get(GIFS_KEY);
     const mappedGifs = gifs.map((gif) => {
       const thumb = 'https://i.giphy.com/media/' + gif.id + '/100.gif';
@@ -51,12 +38,11 @@ export class Gifs {
     cb(mappedGifs);
   }
 
-  static update(cb: () => void) {
+  public static update(cb: () => void) {
     const xhr = new XHR();
     xhr.get(Config.gifsJSONURL, (status: number, response: string) => {
       if (status != 200) {
-        console.log('<Gifs>', status, response);
-        return;
+        throw new Error('<Gifs>' + status + response);
       }
 
       try {
@@ -67,7 +53,7 @@ export class Gifs {
         this.store.set(VERSION, json.version);
         cb();
       } catch (e) {
-        console.log('<Gifs>', e);
+        throw new Error('<Gifs>' + e);
       }
     });
   }

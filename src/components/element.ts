@@ -1,6 +1,6 @@
 
 export class El {
-  private _onremove: any
+  private onremoveF: any;
 
   element: HTMLElement;
 
@@ -21,37 +21,34 @@ export class El {
   }
 
   get onremove(): any {
-    return this._onremove;
+    return this.onremoveF;
   }
 
   set onremove(f: any) {
-    this._onremove = f;
+    this.onremoveF = f;
   }
 
-  constructor() {
-  }
-
-  appendTo(node: Node) {
+  public appendTo(node: Node) {
     node.appendChild(this.element);
   }
 
-  remove() {
+  public remove() {
     this.element.remove();
 
-    if (this._onremove) {
-      this._onremove();
+    if (this.onremoveF) {
+      this.onremoveF();
     }
   }
 
-  isHidden() {
-    return this.element.style.display != 'block';
+  public isHidden() {
+    return this.element.style.display !== 'block';
   }
 
-  show() {
+  public show() {
     this.element.style.display = 'block';
   }
 
-  hide() {
+  public hide() {
     this.element.style.display = 'none';
   }
-};
+}
