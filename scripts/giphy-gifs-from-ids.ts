@@ -12,6 +12,8 @@ Giphy.gifs(ids, (json) => {
   const timestamp = (new Date()).getTime();
 
   fs.writeFile(gifsFilePath, JSON.stringify({ version: timestamp, gifs: json.data }, null, 2), (err) => {
-    fs.writeFile(versionPath, timestamp);
+    fs.writeFile(versionPath, timestamp, (err) => {
+      console.log(ids.length, 'gifs saved');
+    });
   });
 });
